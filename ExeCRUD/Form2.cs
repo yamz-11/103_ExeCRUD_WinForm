@@ -30,7 +30,6 @@ namespace ExeCRUD
         {
             con.Open();
             SqlCommand com = new SqlCommand("exec dbo.SP_SiswaA_Add '" + (tb1.Text) + "','" + tb2.Text + "','" + DateTime.Parse(dateTimePicker1.Text) + "','" + tb4.Text + "','" + tb5.Text + "'", con);
-            com.ExecuteNonQuery();
             con.Close();
             MessageBox.Show("Successfully Saved");
             Read();
@@ -42,7 +41,7 @@ namespace ExeCRUD
             SqlCommand com = new SqlCommand("exec dbo.SP_SiswaA_Read");
             SqlDataAdapter da = new SqlDataAdapter(com);
             DataTable dt = new DataTable();
-            da.Fill(dt);
+            
             dataGridView1.DataSource = dt;
         }
 
@@ -51,7 +50,7 @@ namespace ExeCRUD
 
             con.Open();
             SqlCommand com = new SqlCommand("exec dbo.SP_SiswaA_Update '" + (tb1.Text) + "','" + tb2.Text + "','" + DateTime.Parse(dateTimePicker1.Text) + "','" + tb4.Text + "','" + tb5.Text + "'", con);
-            com.ExecuteNonQuery();
+            
             con.Close();
             MessageBox.Show("Successfully Update");
             Read();
@@ -62,13 +61,17 @@ namespace ExeCRUD
             con.Open();
             if (MessageBox.Show("Anda Yakin Untuk Menghapus?", "Enter",MessageBoxButtons.YesNo)== DialogResult.Yes )
             {
-                SqlCommand com = new SqlCommand("exec dbo.SP_SiswaA_Delete '" + (tb1.Text) + "','" + tb2.Text + "','" + DateTime.Parse(dateTimePicker1.Text) + "','" + tb4.Text + "','" + tb5.Text + "'", con);
-                com.ExecuteNonQuery();
-                con.Close();
+                SqlCommand com = new SqlCommand("exec dbo.SP_SiswaA_Delete '" + (txtNis.Text) + "'", con);
+                
                 MessageBox.Show("Successfully Deleted");
                 Read();
             }
 
+        }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            Close();
         }
     }
 }

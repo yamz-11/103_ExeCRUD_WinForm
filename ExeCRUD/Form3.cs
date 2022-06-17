@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.Data.SqlClient;
 
 namespace ExeCRUD
 {
@@ -16,10 +17,63 @@ namespace ExeCRUD
         {
             InitializeComponent();
         }
-
+        SqlConnection con = new SqlConnection("Data Source=LAPTOP-DMUVDQOK\\WIRATAMA;Initial Catalog=ExeCRUD;User ID=sa;Password=Yama190220");
         private void dataGridView1_CellContentClick(object sender, DataGridViewCellEventArgs e)
         {
 
+        }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            Close();
+        }
+
+        private void Form3_Load(object sender, EventArgs e)
+        {
+            // TODO: This line of code loads data into the 'exeCRUDDataSet2.SiswaB' table. You can move, or remove it, as needed.
+            this.siswaBTableAdapter.Fill(this.exeCRUDDataSet2.SiswaB);
+
+        }
+
+        private void btnAdd_Click(object sender, EventArgs e)
+        {
+            con.Open();
+            SqlCommand com = new SqlCommand("exec dbo.SP_SiswaB_Add '" + (tb1.Text) + "','" + tb2.Text + "','" + DateTime.Parse(dateTimePicker1.Text) + "','" + tb4.Text + "','" + tb5.Text + "'", con);
+            con.Close();
+            MessageBox.Show("Successfully Saved");
+            Read();
+        }
+
+        void Read()
+        {
+            SqlCommand com = new SqlCommand("exec dbo.SP_SiswaB_Read");
+            SqlDataAdapter da = new SqlDataAdapter(com);
+            DataTable dt = new DataTable();
+            da.Fill(dt);
+            dataGridView1.DataSource = dt;
+        }
+
+        private void button2_Click(object sender, EventArgs e)
+        {
+            con.Open();
+            SqlCommand com = new SqlCommand("exec dbo.SP_SiswaB_Update '" + (tb1.Text) + "','" + tb2.Text + "','" + DateTime.Parse(dateTimePicker1.Text) + "','" + tb4.Text + "','" + tb5.Text + "'", con);
+            
+            con.Close();
+            MessageBox.Show("Successfully Update");
+            Read();
+        }
+
+        private void button3_Click(object sender, EventArgs e)
+        {
+            con.Open();
+            if (MessageBox.Show("Anda Yakin Untuk Menghapus?", "Enter", MessageBoxButtons.YesNo) == DialogResult.Yes)
+            {
+                SqlCommand com = new SqlCommand("exec dbo.SP_SiswaB_Delete '" + (tb1.Text) + "','" + tb2.Text + "','" + DateTime.Parse(dateTimePicker1.Text) + "','" + tb4.Text + "','" + tb5.Text + "'", con);
+                
+                con.Close();
+                MessageBox.Show("Successfully Deleted");
+                Read();
+            }
         }
     }
 }
